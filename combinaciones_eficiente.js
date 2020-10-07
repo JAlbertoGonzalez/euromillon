@@ -1,6 +1,9 @@
 const fs = require('fs')
 const _ = require('lodash')
 
+const ELEMENTOS = 50
+const TOMADOS = 5
+
 /**
  * Este script calcula todas las posibles combinaciones
  * de 50 elementos tomados de 5 en 5, sin repetición, y cuyo orden
@@ -10,10 +13,12 @@ const _ = require('lodash')
  * aparecer en el Euromillón.
  */
 
- // El primer número que vamos a analizar
-const first = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+// El primer número que vamos a analizar
+const first = [...Buffer.alloc(ELEMENTOS)]
+first.fill(1, first.length - TOMADOS)
 // El último número de la serie
-const last = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const last = [...Buffer.alloc(ELEMENTOS)]
+last.fill(1, 0, TOMADOS)
 
 /**
  * La estrategia a seguir para conseguir todas las combinaciones
@@ -32,11 +37,11 @@ const last = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
  */
 
 
- /**
-  * nextCombination simplemente, calcula la siguiente combinación
-  * en base a la primera combinación (first).
-  * El resultado sustituye a la primera combinación.
-  */
+/**
+ * nextCombination simplemente, calcula la siguiente combinación
+ * en base a la primera combinación (first).
+ * El resultado sustituye a la primera combinación.
+ */
 function nextCombination() {
   var stop = false;
   var number = 1;
@@ -88,7 +93,7 @@ function nextCombination() {
          * Marcamos los primeros números, del 1 al que sea (las X que
          * nos faltan).
          */
-        for (var j = first.length - (5 - numeros); j < first.length; j++) {
+        for (var j = first.length - (TOMADOS - numeros); j < first.length; j++) {
           first[j] = 1
         }
       }
@@ -113,7 +118,7 @@ function convertToNumbers() {
 
   for (var i = first.length - 1; i >= 0; i--) {
     if (first[i] === 1) {
-      resultado.push(50 - i)
+      resultado.push(ELEMENTOS - i)
     }
   }
 
@@ -126,29 +131,49 @@ function convertToNumbers() {
  * las transforma en un array de 5 dígitos legible, y la escribe
  * en un fichero.
  */
+let fechaInicio = new Date();
 let stop = false;
 let i = 0;
 while (!stop) {
   stop = _.isEqual(last, first)
   i++;
+
+
+  // fs.appendFileSync('euro.txt', convertToNumbers() + '\n')
+
+
+
+  /**
+   * Si imprimes el array binario, o la representación numérica,
+   * tarda 30 segundos. Y verás
+   * en consola el bonito patrón que se dibuja.
+   */
   // console.log(convertToNumbers())
-  fs.appendFileSync('euro.txt', convertToNumbers() + '\n')
+  console.log(first.toString())
+
+  /**
+   * Si no imprimes nada, y sólo dejas que el bucle dé vueltas,
+   * tardará 700 milisegundos.
+   */
   nextCombination()
 }
 
 console.log(i)
 
+console.log(new Date() - fechaInicio)
 
 /**
  * Este último console.log muestra cuántas combinaciones en total
  * se han conseguido.
- * 
+ *
  * Si todo ha ido bien, el resultado final debe ser 2118760
  * (Dos millones, ciento dieciocho mil, setecientos sesenta)
  */
 
 
- /**
-  * A efectos prácticos, a parte de obtener todas las posibles combinaciones,
-  * quizás te interese medir el tiempo que se tarda en conseguirlas todas.
-  */
+/**
+ * A efectos prácticos, a parte de obtener todas las posibles combinaciones,
+ * quizás te interese medir el tiempo que se tarda en conseguirlas todas.
+ */
+
+
