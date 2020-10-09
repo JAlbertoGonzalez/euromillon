@@ -37,7 +37,7 @@ last.fill(1, 0, TOMADOS)
  */
 
 
-/**
+ /**
  * nextCombination simplemente, calcula la siguiente combinación
  * en base a la primera combinación (first).
  * El resultado sustituye a la primera combinación.
@@ -148,7 +148,7 @@ while (!stop) {
    * tarda 30 segundos. Y verás
    * en consola el bonito patrón que se dibuja.
    */
-  // console.log(convertToNumbers())
+   // console.log(convertToNumbers())
   console.log(first.toString())
 
   /**
@@ -160,7 +160,7 @@ while (!stop) {
 
 console.log(i)
 
-console.log(new Date() - fechaInicio)
+console.log(new Date() - fechaInicio + 'ms')
 
 /**
  * Este último console.log muestra cuántas combinaciones en total
